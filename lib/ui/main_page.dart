@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_coin_flutter_app/helpers/movimentacao_helper.dart';
+import 'package:my_coin_flutter_app/ui/movimentacao_page.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -41,7 +42,9 @@ class _MainPageState extends State<MainPage> {
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _showMovimentacaoPage();
+        },
         child: Icon(Icons.add),
       ),
       body: ListView.builder(
@@ -101,9 +104,26 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       onTap: () {
-//        _showContactPage(contact: contacts[index]);
+        _showMovimentacaoPage(movimentacao: movimentacoes[index]);
       },
     );
+  }
+
+  void _showMovimentacaoPage ({Movimentacao movimentacao}) async {
+    final recebeMovimentacao = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MovimentacaoPage(
+              movimentacao: movimentacao,
+            )));
+    if(recebeMovimentacao != null){
+      if(movimentacao !=null){
+        await helper.updateMovimentcao(recebeMovimentacao);
+      } else {
+        await helper.saveMovimentacao(recebeMovimentacao);
+      }
+      _getAllMovimentacoes();
+    }
   }
 
   void _getAllMovimentacoes() {
