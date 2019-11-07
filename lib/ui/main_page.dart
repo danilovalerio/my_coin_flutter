@@ -75,7 +75,7 @@ class _MainPageState extends State<MainPage> {
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "R\$ "+movimentacoes[index].valor ?? "",
+                        "R\$ " + movimentacoes[index].valor ?? "",
                         style: TextStyle(fontSize: 18),
                         textAlign: TextAlign.center,
                       ),
@@ -104,20 +104,70 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       onTap: () {
-        _showMovimentacaoPage(movimentacao: movimentacoes[index]);
+//        _showMovimentacaoPage(movimentacao: movimentacoes[index]);
+        _showOptions(context, index);
       },
     );
   }
 
-  void _showMovimentacaoPage ({Movimentacao movimentacao}) async {
+  void _showOptions(BuildContext context, int index) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return BottomSheet(
+            onClosing: () {},
+            builder: (context) {
+              return Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: FlatButton(
+                        child: Text(
+                          "Editar",
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _showMovimentacaoPage(movimentacao: movimentacoes[index]);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: FlatButton(
+                        child: Text(
+                          "Excluir",
+                          style: TextStyle(color: Colors.red, fontSize: 20),
+                        ),
+                        onPressed: () {
+                          helper.deleteMovimentacao(movimentacoes[index].id);
+                          setState(() {
+                            movimentacoes.removeAt(index);
+                            Navigator.pop(context);
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        });
+  }
+
+  void _showMovimentacaoPage({Movimentacao movimentacao}) async {
     final recebeMovimentacao = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => MovimentacaoPage(
-              movimentacao: movimentacao,
-            )));
-    if(recebeMovimentacao != null){
-      if(movimentacao !=null){
+                  movimentacao: movimentacao,
+                )));
+    if (recebeMovimentacao != null) {
+      if (movimentacao != null) {
         await helper.updateMovimentcao(recebeMovimentacao);
       } else {
         await helper.saveMovimentacao(recebeMovimentacao);
