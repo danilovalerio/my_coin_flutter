@@ -69,31 +69,45 @@ class _MainPageState extends State<MainPage> {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Text(
-                        movimentacoes[index].titulo ?? "",
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                      Expanded(
+                        child: Text(
+                          movimentacoes[index].titulo ?? "",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      Text(
-                        "R\$ " + movimentacoes[index].valor ?? "",
-                        style: TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
+                      Expanded(
+                        child: Text(
+                          movimentacoes[index].data ?? "",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                        ),
                       ),
-//                      Text(
-//                        movimentacoes[index].data ?? "",
-//                        style: TextStyle(fontSize: 18),
-//                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text(
-                        movimentacoes[index].descricao ?? "",
-                        style: TextStyle(fontSize: 18),
+                      Expanded(
+                        child: Text(
+                          movimentacoes[index].descricao ?? "",
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                              fontSize: 10),
+                        ),
                       ),
-                      Text(
-                        movimentacoes[index].data ?? "",
-                        style: TextStyle(fontSize: 18),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          "R\$ "+movimentacoes[index].valor ?? "",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -104,10 +118,54 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       onTap: () {
-//        _showMovimentacaoPage(movimentacao: movimentacoes[index]);
-        _showOptions(context, index);
+        //_showMovimentacaoPage(movimentacao: movimentacoes[index]);
+        //_showOptions(context, index);
+        _showOptionsAlert(context, index);
       },
     );
+  }
+
+  void _showOptionsAlert(BuildContext context, int index) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+//            title: Text("Editar"),
+            titlePadding: EdgeInsets.all(15),
+            titleTextStyle: TextStyle(
+              fontSize: 20,
+              color: Colors.red,
+            ),
+//            content: Text( "descricao" ),
+            backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Editar",
+                  style: TextStyle(color: Colors.red, fontSize: 20),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _showMovimentacaoPage(
+                      movimentacao: movimentacoes[index]);
+                },
+              ),
+              FlatButton(
+                child: Text(
+                  "Excluir",
+                  style: TextStyle(color: Colors.red, fontSize: 20),
+                ),
+                onPressed: () {
+                  helper.deleteMovimentacao(movimentacoes[index].id);
+                  setState(() {
+                    movimentacoes.removeAt(index);
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
   }
 
   void _showOptions(BuildContext context, int index) {
@@ -131,7 +189,8 @@ class _MainPageState extends State<MainPage> {
                         ),
                         onPressed: () {
                           Navigator.pop(context);
-                          _showMovimentacaoPage(movimentacao: movimentacoes[index]);
+                          _showMovimentacaoPage(
+                              movimentacao: movimentacoes[index]);
                         },
                       ),
                     ),
