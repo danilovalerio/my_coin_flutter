@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_coin_flutter_app/helpers/movimentacao_helper.dart';
 import 'package:my_coin_flutter_app/ui/movimentacao_page.dart';
@@ -39,6 +40,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("My Coin"),
+        backgroundColor: Colors.green,
         centerTitle: true,
       ),
       floatingActionButton: FloatingActionButton(
@@ -47,12 +49,36 @@ class _MainPageState extends State<MainPage> {
         },
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.all(10),
-        itemCount: movimentacoes.length,
-        itemBuilder: (context, index) {
-          return _movimentacaoCard(context, index);
-        },
+      body: Container(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(bottom: 10),
+              child: Column(
+                children: <Widget>[
+                  Text("Seja bem vindo Fulano!",
+                    style: TextStyle(fontSize: 22,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text("Saldo: R\$ 0,00",
+                      style: TextStyle(fontSize: 30,
+                          fontWeight: FontWeight.bold)
+                  ),
+                ],
+
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                  padding: EdgeInsets.all(10),
+                  itemCount: movimentacoes.length,
+                  itemBuilder: (context, index) {
+                    return _movimentacaoCard(context, index);
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -81,8 +107,8 @@ class _MainPageState extends State<MainPage> {
                         child: Text(
                           movimentacoes[index].data ?? "",
                           textAlign: TextAlign.end,
-                          style: TextStyle(fontSize: 14,
-                          fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -93,8 +119,7 @@ class _MainPageState extends State<MainPage> {
                         child: Text(
                           movimentacoes[index].descricao ?? "",
                           textAlign: TextAlign.justify,
-                          style: TextStyle(
-                              fontSize: 10),
+                          style: TextStyle(fontSize: 10),
                         ),
                       ),
                     ],
@@ -103,10 +128,12 @@ class _MainPageState extends State<MainPage> {
                     children: <Widget>[
                       Expanded(
                         child: Text(
-                          "R\$ "+movimentacoes[index].valor ?? "",
+                          "R\$ " + movimentacoes[index].valor ?? "",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green),
                         ),
                       ),
                     ],
@@ -146,8 +173,7 @@ class _MainPageState extends State<MainPage> {
                 ),
                 onPressed: () {
                   Navigator.pop(context);
-                  _showMovimentacaoPage(
-                      movimentacao: movimentacoes[index]);
+                  _showMovimentacaoPage(movimentacao: movimentacoes[index]);
                 },
               ),
               FlatButton(
